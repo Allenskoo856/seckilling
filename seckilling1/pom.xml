@@ -41,11 +41,6 @@
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-starter-thymeleaf</artifactId>
       </dependency>
-
-      <dependency>
-          <groupId>org.mybatis.spring.boot</groupId>
-          <artifactId>mybatis-spring-boot-starter</artifactId>
-      </dependency>
       <!-- spring boot end-->
 
 
@@ -68,6 +63,19 @@
           <artifactId>druid</artifactId>
           <version>1.0.5</version>
       </dependency>
+
+      <!--redis 客户端链接-->
+      <dependency>
+        <groupId>redis.clients</groupId>
+        <artifactId>jedis</artifactId>
+      </dependency>
+
+      <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>fastjson</artifactId>
+        <version>1.2.38</version>
+      </dependency>
+    <!--redis 客户端链接-->
 
   </dependencies>
 

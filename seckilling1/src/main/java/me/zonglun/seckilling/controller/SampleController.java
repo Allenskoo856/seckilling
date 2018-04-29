@@ -3,6 +3,7 @@ package me.zonglun.seckilling.controller;
 import me.zonglun.seckilling.domain.CodeMsg;
 import me.zonglun.seckilling.domain.Result;
 import me.zonglun.seckilling.domain.User;
+import me.zonglun.seckilling.redis.RedisService;
 import me.zonglun.seckilling.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,9 @@ public class SampleController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RedisService redisService;
 
     @RequestMapping("hello")
     public String thyeleaf(Model model) {
@@ -41,4 +45,12 @@ public class SampleController {
         userService.tx();
         return Result.success(true);
     }
+
+    @RequestMapping("/redis/get")
+    @ResponseBody
+    public Result<Long> redisGet() {
+       Long rs =  redisService.get("key1", Long.class);
+        return Result.success(rs);
+    }
+    
 }
