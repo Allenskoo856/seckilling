@@ -11,6 +11,19 @@ public abstract class BasePrefix implements KeyPrefix {
     // 前缀
     private String prefix;
 
+    /**
+     * 构造函数，0代表永不过期
+     * @param prefix
+     */
+    public BasePrefix(String prefix) {
+        this(0, prefix);
+    }
+
+    /**
+     *
+     * @param expireSeconds 过期时间
+     * @param prefix   模块前缀
+     */
     public BasePrefix(int expireSeconds, String prefix) {
         this.expireSeconds = expireSeconds;
         this.prefix = prefix;
@@ -25,8 +38,13 @@ public abstract class BasePrefix implements KeyPrefix {
         return expireSeconds;
     }
 
+    /**
+     * 得到preFIX的过程
+     * @return
+     */
     @Override
     public String getPrefix() {
-        return null;
+        String className = getClass().getSimpleName();
+        return className + ":" + prefix;
     }
 }

@@ -4,6 +4,7 @@ import me.zonglun.seckilling.domain.CodeMsg;
 import me.zonglun.seckilling.domain.Result;
 import me.zonglun.seckilling.domain.User;
 import me.zonglun.seckilling.redis.RedisService;
+import me.zonglun.seckilling.redis.UserKey;
 import me.zonglun.seckilling.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,9 +49,20 @@ public class SampleController {
 
     @RequestMapping("/redis/get")
     @ResponseBody
-    public Result<Long> redisGet() {
-       Long rs =  redisService.get("key1", Long.class);
-        return Result.success(rs);
+    public Result<User> redisGet() {
+        User user = redisService.get(UserKey.getById, "" + 1, User.class);
+        return Result.success(user);
     }
+
+    @RequestMapping("/redis/set")
+    @ResponseBody
+    public Result<Boolean> redisSet() {
+        User user = new User();
+        user.setId(1);
+        user.setName("11111");
+        redisService.set(UserKey.getById, "" + 1, user);
+        return Result.success(true);
+    }
+
     
 }

@@ -24,12 +24,12 @@ public class RedisService {
      * @param <T>
      * @return
      */
-    public <T> T get(String key,  Class<T> clazz) {
+    public <T> T get(KeyPrefix prefix, String key,  Class<T> clazz) {
         Jedis jedis = null;
         try {
             jedis =  jedisPool.getResource();
             //生成真正的key
-            String realKey =key;
+            String realKey = prefix.getPrefix() + key;
             String  str = jedis.get(realKey);
             T t =  stringToBean(str, clazz);
             return t;
@@ -39,8 +39,8 @@ public class RedisService {
     }
 
     /**
-     *
-     * @param prefix
+     * 设置redis---key 和value
+     * @param prefix 不同模块有不同的prefix 模板
      * @param key
      * @param value
      * @param <T>
@@ -89,7 +89,7 @@ public class RedisService {
     }
 
     /**
-     *
+     * 增加key贮存的值大小一个
      * @param prefix
      * @param key
      * @param <T>
@@ -108,7 +108,7 @@ public class RedisService {
     }
 
     /**
-     *
+     *减少key贮存的值大小一个
      * @param prefix
      * @param key
      * @param <T>
