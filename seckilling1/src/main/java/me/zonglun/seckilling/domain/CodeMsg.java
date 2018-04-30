@@ -47,6 +47,7 @@ public class CodeMsg {
     public int getCode() {
         return code;
     }
+
     public String getMsg() {
         return msg;
     }

@@ -16,6 +16,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author : Administrator
  * @create 2018-04-29 20:41
@@ -34,6 +36,7 @@ public class LoginController {
 
     /**
      * 路由---到登录界面
+     *
      * @return
      */
     @RequestMapping("/to_login")
@@ -43,31 +46,20 @@ public class LoginController {
 
     /**
      * 校验登录的用户名和密码是否正确
+     *
      * @param loginVo
      * @return
      */
     @RequestMapping("/do_login")
     @ResponseBody
-    public Result<CodeMsg> toLogin(@Validated LoginVo loginVo) {
+    public Result<CodeMsg> toLogin(HttpServletResponse response, @Validated LoginVo loginVo) {
         logger.info(loginVo.toString());
-        // 参数校验
-        String passInput = loginVo.getPassword();
-        String moblie = loginVo.getMobile();
-        if (StringUtils.isEmpty(passInput)) {
-            return Result.error(CodeMsg.PASSWORD_EMPTY);
-        }
-        if (StringUtils.isEmpty(moblie)) {
-            return Result.error(CodeMsg.MBOLE_EMPTY);
-        }
-        if (!ValidatorUtil.isMobile(moblie)) {
-            return Result.error(CodeMsg.MBOLE_ERROR);
-        }
         // 登录过程
-        CodeMsg codeMsg =  seckillUserService.login(loginVo);
-        if (codeMsg.getCode() == 0) {
+        Boolean flag = seckillUserService.login(response, loginVo);
+        if (flag) {
             return Result.success(CodeMsg.SUCCESS);
         } else {
-            return Result.error(codeMsg);
+            return Result.error(CodeMsg.PASSWORD_ERROR);
         }
     }
 

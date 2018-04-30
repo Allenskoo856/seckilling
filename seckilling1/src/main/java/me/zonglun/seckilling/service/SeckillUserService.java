@@ -10,6 +10,7 @@ import me.zonglun.seckilling.redis.RedisService;
 import me.zonglun.seckilling.utils.MD5Utils;
 import me.zonglun.seckilling.utils.UUIDUtil;
 import me.zonglun.seckilling.vo.LoginVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.stereotype.Service;
@@ -84,5 +85,22 @@ public class SeckillUserService {
         cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);
+    }
+
+    /**
+     * 从cookie之中获得之前存在redis服务器中的信息，获得user
+     * @param token
+     * @return
+     */
+    public SeckillUser getByToken(HttpServletResponse response, String token) {
+        if (StringUtils.isEmpty(token)) {
+            return null;
+        }
+        SeckillUser user = redisService.get(MiaoshaUserKey.token, token, SeckillUser.class);
+        // 每次登录增加cookie的缓存期限
+        if (user != null) {
+            addCookie(response, token, user);
+        }
+        return user;
     }
 }

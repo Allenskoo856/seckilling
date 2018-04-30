@@ -5,11 +5,13 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Service;
 
 /**
  * @author : Administrator
  * @create 2018-04-28 21:36
  */
+@Service
 @Mapper
 public interface UserDao {
 
