@@ -64,5 +64,4 @@ public class SampleController {
         return Result.success(true);
     }
 
-    
 }
