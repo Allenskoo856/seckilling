@@ -2,7 +2,6 @@ package me.zonglun.seckilling.service;
 
 import me.zonglun.seckilling.dao.SeckillUserDao;
 import me.zonglun.seckilling.domain.CodeMsg;
-import me.zonglun.seckilling.domain.Result;
 import me.zonglun.seckilling.domain.SeckillUser;
 import me.zonglun.seckilling.exception.GlobalException;
 import me.zonglun.seckilling.redis.MiaoshaUserKey;
@@ -12,12 +11,10 @@ import me.zonglun.seckilling.utils.UUIDUtil;
 import me.zonglun.seckilling.vo.LoginVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
 
 /**
  * @author : Administrator
