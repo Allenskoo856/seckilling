@@ -1,16 +1,24 @@
 package me.zonglun.seckilling.controller;
 
 import me.zonglun.seckilling.domain.SeckillUser;
+import me.zonglun.seckilling.redis.GoodsKey;
 import me.zonglun.seckilling.redis.RedisService;
 import me.zonglun.seckilling.service.GoodsService;
 import me.zonglun.seckilling.service.SeckillUserService;
 import me.zonglun.seckilling.vo.GoodsVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.spring4.context.SpringWebContext;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -30,20 +38,41 @@ public class GoodsController {
     @Autowired
     GoodsService goodsService;
 
+    @Autowired
+    ThymeleafViewResolver thymeleafViewResolver;
+
+    @Autowired
+    ApplicationContext applicationContext;
+
     /**
-     * 路由--到商品列表页面
+     * 路由--到商品列表页面，自己的商品列表文献
+     * QPS: 1267
+     * 5000 * 10
      * @param model
      * @param user
      * @return
      */
-    @RequestMapping("/to_list")
-    public String list(Model model, SeckillUser user) {
+    @RequestMapping(value = "/to_list", produces = "text/html")
+    @ResponseBody
+    public String list(HttpServletRequest request, HttpServletResponse response , Model model, SeckillUser user) {
         model.addAttribute("user", user);
         // 查询商品列表
         List<GoodsVo> goodsList = goodsService.listGoodsVo();
         model.addAttribute("goodsList", goodsList);
-        return "goods_list";
-    }
+        // return "goods_list";
+        String html = redisService.get(GoodsKey.getGoodsList, "", String.class);
+        if (!StringUtils.isEmpty(html)) {
+            return html;
+        }
+        SpringWebContext ctx = new SpringWebContext(request,response,
+                request.getServletContext(),request.getLocale(), model.asMap(), applicationContext );
+        // 手动渲染
+        html = thymeleafViewResolver.getTemplateEngine().process("goods_list", ctx);
+        if(!StringUtils.isEmpty(html)) {
+            redisService.set(GoodsKey.getGoodsList, "", html);
+        }
+        return html;
+}
 
     /**
      * 路由到商品详情--页面
@@ -66,7 +95,7 @@ public class GoodsController {
 
         int miaoshaStatus = 0;
         int remainSeconds = 0;
-        //秒杀还没开始，倒计时
+        // 秒杀还没开始，倒计时
         if(now < startAt ) {
             miaoshaStatus = 0;
             remainSeconds = (int)((startAt - now )/1000);
