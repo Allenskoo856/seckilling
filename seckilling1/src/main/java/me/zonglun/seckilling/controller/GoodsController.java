@@ -5,14 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import me.zonglun.seckilling.domain.MiaoshaUser;
-import me.zonglun.seckilling.domain.Result;
-import me.zonglun.seckilling.redis.GoodsKey;
-import me.zonglun.seckilling.redis.RedisService;
-import me.zonglun.seckilling.service.GoodsService;
-import me.zonglun.seckilling.service.MiaoshaUserService;
-import me.zonglun.seckilling.vo.GoodsDetailVo;
-import me.zonglun.seckilling.vo.GoodsVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -24,6 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.spring4.context.SpringWebContext;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
+import me.zonglun.seckilling.domain.MiaoshaUser;
+import me.zonglun.seckilling.redis.GoodsKey;
+import me.zonglun.seckilling.redis.RedisService;
+import me.zonglun.seckilling.result.Result;
+import me.zonglun.seckilling.service.GoodsService;
+import me.zonglun.seckilling.service.MiaoshaUserService;
+import me.zonglun.seckilling.vo.GoodsDetailVo;
+import me.zonglun.seckilling.vo.GoodsVo;
 
 @Controller
 @RequestMapping("/goods")
@@ -118,8 +118,8 @@ public class GoodsController {
     
     @RequestMapping(value="/detail/{goodsId}")
     @ResponseBody
-    public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response, Model model, MiaoshaUser user,
-										@PathVariable("goodsId")long goodsId) {
+    public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response, Model model,MiaoshaUser user,
+    		@PathVariable("goodsId")long goodsId) {
     	GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
     	long startAt = goods.getStartDate().getTime();
     	long endAt = goods.getEndDate().getTime();

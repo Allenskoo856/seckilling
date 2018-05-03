@@ -1,4 +1,4 @@
-package com.imooc.miaosha.config;
+package me.zonglun.seckilling.config;
 
 import java.util.List;
 
@@ -17,6 +17,5 @@ public class WebConfig  extends WebMvcConfigurerAdapter{
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
 		argumentResolvers.add(userArgumentResolver);
 	}
-	
-	
+
 }

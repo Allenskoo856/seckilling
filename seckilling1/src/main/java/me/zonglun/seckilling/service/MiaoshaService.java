@@ -1,11 +1,12 @@
 package me.zonglun.seckilling.service;
 
-import me.zonglun.seckilling.domain.MiaoshaUser;
-import me.zonglun.seckilling.domain.OrderInfo;
-import me.zonglun.seckilling.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import me.zonglun.seckilling.domain.MiaoshaUser;
+import me.zonglun.seckilling.domain.OrderInfo;
+import me.zonglun.seckilling.vo.GoodsVo;
 
 @Service
 public class MiaoshaService {

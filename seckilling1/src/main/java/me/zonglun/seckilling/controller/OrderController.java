@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.imooc.miaosha.domain.MiaoshaUser;
-import com.imooc.miaosha.domain.OrderInfo;
-import com.imooc.miaosha.redis.RedisService;
-import com.imooc.miaosha.result.CodeMsg;
-import com.imooc.miaosha.result.Result;
-import com.imooc.miaosha.service.GoodsService;
-import com.imooc.miaosha.service.MiaoshaUserService;
-import com.imooc.miaosha.service.OrderService;
-import com.imooc.miaosha.vo.GoodsVo;
-import com.imooc.miaosha.vo.OrderDetailVo;
+import me.zonglun.seckilling.domain.MiaoshaUser;
+import me.zonglun.seckilling.domain.OrderInfo;
+import me.zonglun.seckilling.redis.RedisService;
+import me.zonglun.seckilling.result.CodeMsg;
+import me.zonglun.seckilling.result.Result;
+import me.zonglun.seckilling.service.GoodsService;
+import me.zonglun.seckilling.service.MiaoshaUserService;
+import me.zonglun.seckilling.service.OrderService;
+import me.zonglun.seckilling.vo.GoodsVo;
+import me.zonglun.seckilling.vo.OrderDetailVo;
 
 @Controller
 @RequestMapping("/order")

@@ -1,6 +1,5 @@
 package me.zonglun.seckilling.vo;
 
-
 import me.zonglun.seckilling.domain.MiaoshaUser;
 
 public class GoodsDetailVo {

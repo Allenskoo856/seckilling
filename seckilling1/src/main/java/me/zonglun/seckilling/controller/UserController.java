@@ -6,10 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.imooc.miaosha.domain.MiaoshaUser;
-import com.imooc.miaosha.redis.RedisService;
-import com.imooc.miaosha.result.Result;
-import com.imooc.miaosha.service.MiaoshaUserService;
+import me.zonglun.seckilling.domain.MiaoshaUser;
+import me.zonglun.seckilling.redis.RedisService;
+import me.zonglun.seckilling.result.Result;
+import me.zonglun.seckilling.service.MiaoshaUserService;
 
 @Controller
 @RequestMapping("/user")

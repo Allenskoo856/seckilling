@@ -1,8 +1,6 @@
 package me.zonglun.seckilling.redis;
 
-import me.zonglun.seckilling.redis.BasePrefix;
-
-public class GoodsKey extends BasePrefix {
+public class GoodsKey extends BasePrefix{
 
 	private GoodsKey(int expireSeconds, String prefix) {
 		super(expireSeconds, prefix);

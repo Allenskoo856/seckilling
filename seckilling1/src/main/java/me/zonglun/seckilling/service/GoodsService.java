@@ -1,12 +1,13 @@
 package me.zonglun.seckilling.service;
 
-import me.zonglun.seckilling.dao.GoodsDao;
-import me.zonglun.seckilling.domain.MiaoshaGoods;
-import me.zonglun.seckilling.vo.GoodsVo;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import me.zonglun.seckilling.dao.GoodsDao;
+import me.zonglun.seckilling.domain.MiaoshaGoods;
+import me.zonglun.seckilling.vo.GoodsVo;
 
 @Service
 public class GoodsService {
@@ -27,4 +28,7 @@ public class GoodsService {
 		g.setGoodsId(goods.getId());
 		goodsDao.reduceStock(g);
 	}
+	
+	
+	
 }

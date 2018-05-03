@@ -1,7 +1,6 @@
 package me.zonglun.seckilling.exception;
 
-
-import me.zonglun.seckilling.domain.CodeMsg;
+import me.zonglun.seckilling.result.CodeMsg;
 
 public class GlobalException extends RuntimeException{
 

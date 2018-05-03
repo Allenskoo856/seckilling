@@ -3,10 +3,6 @@ package me.zonglun.seckilling.controller;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import me.zonglun.seckilling.redis.RedisService;
-import me.zonglun.seckilling.result.Result;
-import me.zonglun.seckilling.service.MiaoshaUserService;
-import me.zonglun.seckilling.vo.LoginVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
+import me.zonglun.seckilling.redis.RedisService;
+import me.zonglun.seckilling.result.Result;
+import me.zonglun.seckilling.service.MiaoshaUserService;
+import me.zonglun.seckilling.vo.LoginVo;
 
 @Controller
 @RequestMapping("/login")
@@ -23,10 +22,10 @@ public class LoginController {
 	private static Logger log = LoggerFactory.getLogger(LoginController.class);
 	
 	@Autowired
-    MiaoshaUserService userService;
+	MiaoshaUserService userService;
 	
 	@Autowired
-    RedisService redisService;
+	RedisService redisService;
 	
     @RequestMapping("/to_login")
     public String toLogin() {

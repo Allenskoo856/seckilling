@@ -6,12 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.imooc.miaosha.domain.User;
-import com.imooc.miaosha.redis.RedisService;
-import com.imooc.miaosha.redis.UserKey;
-import com.imooc.miaosha.result.CodeMsg;
-import com.imooc.miaosha.result.Result;
-import com.imooc.miaosha.service.UserService;
+import me.zonglun.seckilling.domain.User;
+import me.zonglun.seckilling.redis.RedisService;
+import me.zonglun.seckilling.redis.UserKey;
+import me.zonglun.seckilling.result.CodeMsg;
+import me.zonglun.seckilling.result.Result;
+import me.zonglun.seckilling.service.UserService;
 
 @Controller
 @RequestMapping("/demo")
