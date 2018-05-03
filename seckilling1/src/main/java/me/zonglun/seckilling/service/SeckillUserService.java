@@ -9,9 +9,9 @@ import me.zonglun.seckilling.redis.RedisService;
 import me.zonglun.seckilling.utils.MD5Utils;
 import me.zonglun.seckilling.utils.UUIDUtil;
 import me.zonglun.seckilling.vo.LoginVo;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -37,8 +37,47 @@ public class SeckillUserService {
      * @return
      */
     public SeckillUser getById(Long id) {
+        // 得到对象缓存
+        SeckillUser user = redisService.get(MiaoshaUserKey.getById, "" + id, SeckillUser.class);
+        if (user != null) {
+            return user;
+        }
+        // 取数据库
+        user = seckillUserDao.getById(id);
+        if (user != null) {
+            redisService.set(MiaoshaUserKey.getById, "" + id, user);
+        }
         return seckillUserDao.getById(id);
+
     }
+
+    /**
+     *  跟新密码功能
+     * @param token
+     * @param id
+     * @param formPass
+     * @return
+     */
+    public boolean updatePassword(String token, long id, String formPass) {
+        //取user
+        SeckillUser user = getById(id);
+        if(user == null) {
+            throw new GlobalException(CodeMsg.MBOLE_NOT_FOUND);
+        }
+        //更新数据库
+        SeckillUser toBeUpdate = new SeckillUser();
+        toBeUpdate.setId(id);
+        toBeUpdate.setPassword(MD5Utils.formPassToDBPass(formPass, user.getSalt()));
+        seckillUserDao.update(toBeUpdate);
+        //处理缓存
+        redisService.delete(MiaoshaUserKey.getById, ""+id);
+        user.setPassword(toBeUpdate.getPassword());
+        redisService.set(MiaoshaUserKey.token, token, user);
+        return true;
+    }
+
+
+
 
     /**
      * 用户登录方法
@@ -46,7 +85,7 @@ public class SeckillUserService {
      * @param loginVo
      * @return true or false
      */
-    public Boolean login(HttpServletResponse response,  LoginVo loginVo) {
+    public String login(HttpServletResponse response,  LoginVo loginVo) {
         if (loginVo == null) {
             throw new GlobalException(CodeMsg.SERVER_ERROR);
         }
@@ -67,8 +106,10 @@ public class SeckillUserService {
         // 生产cookie
         String token = UUIDUtil.uuid();
         addCookie(response, token, user);
-        return true;
+        return token;
     }
+
+
 
     /**
      * 增加Cookie信息

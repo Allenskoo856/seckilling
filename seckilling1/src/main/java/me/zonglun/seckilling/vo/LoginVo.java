@@ -1,40 +1,38 @@
 package me.zonglun.seckilling.vo;
 
-import javax.validation.constraints.NotNull;
-
-import me.zonglun.seckilling.validator.IsMoblie;
+import me.zonglun.seckilling.validator.IsMobile;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
 
 public class LoginVo {
-	
-	@NotNull
 
-    @IsMoblie
-	private String mobile;
-	
-	@NotNull
-	@Length(min=32)
-	private String password;
-	
-	public String getMobile() {
-		return mobile;
-	}
+    @NotNull
+    @IsMobile
+    private String mobile;
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+    @NotNull
+    @Length(min = 32)
+    private String password;
 
-	public String getPassword() {
-		return password;
-	}
+    public String getMobile() {
+        return mobile;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
-	@Override
-	public String toString() {
-		return "LoginVo [mobile=" + mobile + ", password=" + password + "]";
-	}
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "LoginVo [mobile=" + mobile + ", password=" + password + "]";
+    }
 }

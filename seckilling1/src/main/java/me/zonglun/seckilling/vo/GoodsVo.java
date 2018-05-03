@@ -1,8 +1,8 @@
 package me.zonglun.seckilling.vo;
 
-import java.util.Date;
-
 import me.zonglun.seckilling.domain.Goods;
+
+import java.util.Date;
 
 public class GoodsVo extends Goods {
     private Double miaoshaPrice;

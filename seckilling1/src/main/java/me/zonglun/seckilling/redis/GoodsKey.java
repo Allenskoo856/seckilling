@@ -1,12 +1,12 @@
 package me.zonglun.seckilling.redis;
 
-public class GoodsKey extends BasePrefix{
+import me.zonglun.seckilling.redis.BasePrefix;
+
+public class GoodsKey extends BasePrefix {
 
 	private GoodsKey(int expireSeconds, String prefix) {
 		super(expireSeconds, prefix);
 	}
-
-	// 有效期1分钟
 	public static GoodsKey getGoodsList = new GoodsKey(60, "gl");
 	public static GoodsKey getGoodsDetail = new GoodsKey(60, "gd");
 }
