@@ -5,7 +5,6 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import me.zonglun.seckilling.dao.OrderDao;
 import me.zonglun.seckilling.domain.MiaoshaOrder;
 import me.zonglun.seckilling.domain.MiaoshaUser;
@@ -24,7 +23,7 @@ public class OrderService {
 	RedisService redisService;
 	
 	public MiaoshaOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId) {
-		//return orderDao.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
+
 		return redisService.get(OrderKey.getMiaoshaOrderByUidGid, ""+userId+"_"+goodsId, MiaoshaOrder.class);
 	}
 	

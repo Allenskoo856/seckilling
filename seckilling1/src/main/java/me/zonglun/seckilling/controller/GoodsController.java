@@ -72,7 +72,7 @@ public class GoodsController {
     	return html;
     }
     
-    @RequestMapping(value="/to_detail2/{goodsId}",produces="text/html")
+    @RequestMapping(value="/to_detail/{goodsId}",produces="text/html")
     @ResponseBody
     public String detail2(HttpServletRequest request, HttpServletResponse response, Model model,MiaoshaUser user,
     		@PathVariable("goodsId")long goodsId) {
@@ -105,7 +105,6 @@ public class GoodsController {
     	}
     	model.addAttribute("miaoshaStatus", miaoshaStatus);
     	model.addAttribute("remainSeconds", remainSeconds);
-//        return "goods_detail";
     	
     	SpringWebContext ctx = new SpringWebContext(request,response,
     			request.getServletContext(),request.getLocale(), model.asMap(), applicationContext );
@@ -115,34 +114,4 @@ public class GoodsController {
     	}
     	return html;
     }
-    
-    @RequestMapping(value="/detail/{goodsId}")
-    @ResponseBody
-    public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response, Model model,MiaoshaUser user,
-    		@PathVariable("goodsId")long goodsId) {
-    	GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
-    	long startAt = goods.getStartDate().getTime();
-    	long endAt = goods.getEndDate().getTime();
-    	long now = System.currentTimeMillis();
-    	int miaoshaStatus = 0;
-    	int remainSeconds = 0;
-    	if(now < startAt ) {//秒杀还没开始，倒计时
-    		miaoshaStatus = 0;
-    		remainSeconds = (int)((startAt - now )/1000);
-    	}else  if(now > endAt){//秒杀已经结束
-    		miaoshaStatus = 2;
-    		remainSeconds = -1;
-    	}else {//秒杀进行中
-    		miaoshaStatus = 1;
-    		remainSeconds = 0;
-    	}
-    	GoodsDetailVo vo = new GoodsDetailVo();
-    	vo.setGoods(goods);
-    	vo.setUser(user);
-    	vo.setRemainSeconds(remainSeconds);
-    	vo.setMiaoshaStatus(miaoshaStatus);
-    	return Result.success(vo);
-    }
-    
-    
 }
