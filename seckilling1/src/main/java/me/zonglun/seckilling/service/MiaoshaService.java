@@ -24,5 +24,11 @@ public class MiaoshaService {
 		//order_info maiosha_order
 		return orderService.createOrder(user, goods);
 	}
-	
+
+	// todo
+    public long getMiaoshaResult(Long id, long goodsId) {
+		long l1 = 0;
+		return l1;
+    }
+
 }

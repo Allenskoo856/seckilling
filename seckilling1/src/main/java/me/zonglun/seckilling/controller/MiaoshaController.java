@@ -1,16 +1,10 @@
 package me.zonglun.seckilling.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import me.zonglun.seckilling.domain.MiaoshaOrder;
 import me.zonglun.seckilling.domain.MiaoshaUser;
 import me.zonglun.seckilling.domain.OrderInfo;
+import me.zonglun.seckilling.rabbitmq.MQSender;
+import me.zonglun.seckilling.rabbitmq.MiaoshaMessage;
+import me.zonglun.seckilling.redis.GoodsKey;
 import me.zonglun.seckilling.redis.RedisService;
 import me.zonglun.seckilling.result.CodeMsg;
 import me.zonglun.seckilling.result.Result;
@@ -19,10 +13,23 @@ import me.zonglun.seckilling.service.MiaoshaService;
 import me.zonglun.seckilling.service.MiaoshaUserService;
 import me.zonglun.seckilling.service.OrderService;
 import me.zonglun.seckilling.vo.GoodsVo;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
+/**
+ * @author :xcallen
+ */
 @Controller
 @RequestMapping("/miaosha")
-public class MiaoshaController {
+public class MiaoshaController implements InitializingBean{
 
 	@Autowired
 	MiaoshaUserService userService;
@@ -38,36 +45,66 @@ public class MiaoshaController {
 	
 	@Autowired
 	MiaoshaService miaoshaService;
+
+	@Autowired
+	MQSender mqSender;
 	
-	/**
+	/*
 	 * QPS:1306
 	 * 5000 * 10
 	 * */
-	/**
-	 *  GET POST有什么区别？
-	 * */
     @RequestMapping(value="/do_miaosha", method=RequestMethod.POST)
     @ResponseBody
-    public Result<OrderInfo> miaosha(Model model,MiaoshaUser user,
-    		@RequestParam("goodsId")long goodsId) {
+    public Result<Integer> miaosha(Model model, MiaoshaUser user,
+								   @RequestParam("goodsId")long goodsId) {
     	model.addAttribute("user", user);
     	if(user == null) {
     		return Result.error(CodeMsg.SESSION_ERROR);
     	}
-    	//判断库存
-		//10个商品，req1 req2
-    	GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
-    	int stock = goods.getStockCount();
-    	if(stock <= 0) {
-    		return Result.error(CodeMsg.MIAO_SHA_OVER);
-    	}
-    	//判断是否已经秒杀到了
-    	MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
-    	if(order != null) {
-    		return Result.error(CodeMsg.REPEATE_MIAOSHA);
-    	}
-    	//减库存 下订单 写入秒杀订单
-    	OrderInfo orderInfo = miaoshaService.miaosha(user, goods);
-        return Result.success(orderInfo);
+		// 预减库存---从缓存中取到库存
+		long stock = redisService.decr(GoodsKey.getMiaoShaGoodsStock, "" + goodsId);
+		if (stock < 0) {
+			return Result.error(CodeMsg.REPEATE_MIAOSHA);
+		}
+
+		// 入队
+		MiaoshaMessage mm = new MiaoshaMessage();
+		mm.setUser(user);
+		mm.setGoodsId(goodsId);
+		mqSender.sendMiaoshaMessage(mm);
+		// 排队中
+		return Result.success(0);
     }
+
+	/**
+	 * orderId：成功
+	 * -1：秒杀失败
+	 * 0： 排队中
+	 * */
+	@RequestMapping(value="/result", method=RequestMethod.GET)
+	@ResponseBody
+	public Result<Long> miaoshaResult(Model model,MiaoshaUser user,
+									  @RequestParam("goodsId")long goodsId) {
+		model.addAttribute("user", user);
+		if(user == null) {
+			return Result.error(CodeMsg.SESSION_ERROR);
+		}
+		long result  =miaoshaService.getMiaoshaResult(user.getId(), goodsId);
+		return Result.success(result);
+	}
+
+	/**
+	 * 系统初始化--启动的时候将库存数量放入redis之中
+	 * @throws Exception
+	 */
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		List<GoodsVo> goodsVoList = goodsService.listGoodsVo();
+		if (goodsVoList == null) {
+			return;
+		}
+		for (GoodsVo goods : goodsVoList) {
+			redisService.set(GoodsKey.getMiaoShaGoodsStock, "" + goods.getId(), goods.getStockCount());
+		}
+	}
 }
