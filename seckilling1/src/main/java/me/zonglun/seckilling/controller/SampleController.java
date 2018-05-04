@@ -1,5 +1,6 @@
 package me.zonglun.seckilling.controller;
 
+import me.zonglun.seckilling.rabbitmq.MQSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,9 @@ public class SampleController {
 	
 	@Autowired
 	RedisService redisService;
+
+    @Autowired
+    MQSender sender;
 	
     @RequestMapping("/hello")
     @ResponseBody
@@ -41,11 +45,11 @@ public class SampleController {
         return "hello";
     }
     
-    @RequestMapping("/db/get")
+    @RequestMapping("/mq/topic")
     @ResponseBody
-    public Result<User> dbGet() {
-    	User user = userService.getById(1);
-        return Result.success(user);
+    public Result<String> mq() {
+        sender.sendTopic("hello, china");
+        return Result.success("hello, china");
     }
     
     
