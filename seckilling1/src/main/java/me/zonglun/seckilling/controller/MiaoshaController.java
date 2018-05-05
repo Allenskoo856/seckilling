@@ -1,7 +1,6 @@
 package me.zonglun.seckilling.controller;
 
 import me.zonglun.seckilling.domain.MiaoshaUser;
-import me.zonglun.seckilling.domain.OrderInfo;
 import me.zonglun.seckilling.rabbitmq.MQSender;
 import me.zonglun.seckilling.rabbitmq.MiaoshaMessage;
 import me.zonglun.seckilling.redis.GoodsKey;
@@ -48,11 +47,14 @@ public class MiaoshaController implements InitializingBean{
 
 	@Autowired
 	MQSender mqSender;
-	
-	/*
-	 * QPS:1306
-	 * 5000 * 10
-	 * */
+
+	/**
+	 *
+	 * @param model
+	 * @param user
+	 * @param goodsId
+	 * @return
+	 */
     @RequestMapping(value="/do_miaosha", method=RequestMethod.POST)
     @ResponseBody
     public Result<Integer> miaosha(Model model, MiaoshaUser user,
@@ -66,7 +68,6 @@ public class MiaoshaController implements InitializingBean{
 		if (stock < 0) {
 			return Result.error(CodeMsg.REPEATE_MIAOSHA);
 		}
-
 		// 入队
 		MiaoshaMessage mm = new MiaoshaMessage();
 		mm.setUser(user);

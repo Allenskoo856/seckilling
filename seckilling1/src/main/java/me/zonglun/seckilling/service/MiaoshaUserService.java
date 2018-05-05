@@ -42,7 +42,14 @@ public class MiaoshaUserService {
 		}
 		return user;
 	}
-	// http://blog.csdn.net/tTU1EvLDeLFq5btqiK/article/details/78693323
+
+	/**
+	 *  更新密码功能
+	 * @param token
+	 * @param id
+	 * @param formPass
+	 * @return
+	 */
 	public boolean updatePassword(String token, long id, String formPass) {
 		//取user
 		MiaoshaUser user = getById(id);
@@ -73,8 +80,13 @@ public class MiaoshaUserService {
 		}
 		return user;
 	}
-	
 
+	/**
+	 *
+	 * @param response
+	 * @param loginVo
+	 * @return
+	 */
 	public String login(HttpServletResponse response, LoginVo loginVo) {
 		if(loginVo == null) {
 			throw new GlobalException(CodeMsg.SERVER_ERROR);

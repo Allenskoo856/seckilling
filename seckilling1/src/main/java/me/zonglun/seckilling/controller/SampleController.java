@@ -45,12 +45,12 @@ public class SampleController {
         return "hello";
     }
     
-    @RequestMapping("/mq/topic")
+ /*   @RequestMapping("/mq/topic")
     @ResponseBody
     public Result<String> mq() {
         sender.sendTopic("hello, china");
         return Result.success("hello, china");
-    }
+    }*/
     
     
     @RequestMapping("/db/tx")
