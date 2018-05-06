@@ -18,10 +18,24 @@
     <!-- common.js -->
     <script type="text/javascript" src="/js/common.js"></script>
     <script type="text/javascript" src="/js/goods_detail.js"></script>
+    <style type="text/css">
+        html,body{
+            height:100%;
+            width:100%;
+        }
+        body{
+            background:url('/img/bg2.jpg') no-repeat;
+            background-size:100% 100%;
+        }
+        #goodslist td{
+            border-top:1px solid #39503f61;
+        }
+    </style>
+
 </head>
 <body>
 
-<div class="panel panel-default">
+<div class="panel panel-default" style="height:100%;background-color:rgba(222,222,222,0.8)" >
   <div class="panel-heading">秒杀商品详情</div>
   <div class="panel-body">
   	<span id="userTip"> 您还没有登录，请登陆后再操作<br/></span>
@@ -44,12 +58,14 @@
         	<span id="miaoshaTip"></span>
         </td>
         <td>
-        <!--  
-        	<form id="miaoshaForm" method="post" action="/miaosha/do_miaosha">
-        		<button class="btn btn-primary btn-block" type="submit" id="buyButton">立即秒杀</button>
-        		<input type="hidden" name="goodsId"  id="goodsId" />
-        	</form>-->
-        	<button class="btn btn-primary btn-block" type="button" id="buyButton"onclick="doMiaosha()">立即秒杀</button>
+            <div class="row">
+                <div class="form-inline">
+                    <img id="verifyCodeImg" width="80" height="32"  style="display:none" onclick="refreshVerifyCode()"/>
+                    <input id="verifyCode"  class="form-control" style="display:none"/>
+                    <button class="btn btn-primary" type="button" id="buyButton"onclick="getMiaoshaPath()">立即秒杀</button>
+                </div>
+            </div>
+
         	<input type="hidden" name="goodsId"  id="goodsId" />
         </td>
      </tr>

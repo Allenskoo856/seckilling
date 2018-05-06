@@ -15,16 +15,16 @@ import me.zonglun.seckilling.service.MiaoshaUserService;
 @RequestMapping("/user")
 public class UserController {
 
-	@Autowired
-	MiaoshaUserService userService;
-	
-	@Autowired
-	RedisService redisService;
-	
+    @Autowired
+    MiaoshaUserService userService;
+
+    @Autowired
+    RedisService redisService;
+
     @RequestMapping("/info")
     @ResponseBody
-    public Result<MiaoshaUser> info(Model model,MiaoshaUser user) {
+    public Result<MiaoshaUser> info(Model model, MiaoshaUser user) {
         return Result.success(user);
     }
-    
+
 }
