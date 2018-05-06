@@ -3,22 +3,16 @@ package me.zonglun.seckilling.redis;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-/**
- * @author : Administrator
- * @create 2018-04-29 9:36
- */
 @Component
 @ConfigurationProperties(prefix = "redis")
 public class RedisConfig {
     private String host;
     private int port;
-    //秒
-    private int timeout;
+    private int timeout;//秒
     private String password;
     private int poolMaxTotal;
     private int poolMaxIdle;
-    //秒
-    private int poolMaxWait;
+    private int poolMaxWait;//秒
 
     public String getHost() {
         return host;

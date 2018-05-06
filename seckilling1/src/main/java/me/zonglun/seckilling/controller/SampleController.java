@@ -1,43 +1,48 @@
 package me.zonglun.seckilling.controller;
 
-import me.zonglun.seckilling.domain.CodeMsg;
-import me.zonglun.seckilling.domain.Result;
-import me.zonglun.seckilling.domain.User;
-import me.zonglun.seckilling.redis.RedisService;
-import me.zonglun.seckilling.redis.UserKey;
-import me.zonglun.seckilling.service.UserService;
+import me.zonglun.seckilling.rabbitmq.MQSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-/**
- * @author : Administrator
- * @create 2018-04-19 5:02
- */
+import me.zonglun.seckilling.domain.User;
+import me.zonglun.seckilling.redis.RedisService;
+import me.zonglun.seckilling.redis.UserKey;
+import me.zonglun.seckilling.result.CodeMsg;
+import me.zonglun.seckilling.result.Result;
+import me.zonglun.seckilling.service.UserService;
+
 @Controller
-@RequestMapping("/demo/")
+@RequestMapping("/demo")
 public class SampleController {
 
     @Autowired
-    private UserService userService;
+    UserService userService;
 
     @Autowired
-    private RedisService redisService;
+    RedisService redisService;
 
-    @RequestMapping("hello")
-    public String thyeleaf(Model model) {
-        model.addAttribute("name", "allen");
-        return "hello";
+    @Autowired
+    MQSender sender;
+
+    @RequestMapping("/hello")
+    @ResponseBody
+    public Result<String> home() {
+        return Result.success("Hello，world");
     }
 
-
-    @RequestMapping("/db/get")
+    @RequestMapping("/error")
     @ResponseBody
-    public Result<User> dbGet() {
-        User user = userService.getById(1);
-        return Result.success(user);
+    public Result<String> error() {
+        return Result.error(CodeMsg.SESSION_ERROR);
+    }
+
+    @RequestMapping("/hello/themaleaf")
+    public String themaleaf(Model model) {
+        model.addAttribute("name", "Joshua");
+        return "hello";
     }
 
     @RequestMapping("/db/tx")
@@ -59,7 +64,8 @@ public class SampleController {
     public Result<Boolean> redisSet() {
         User user = new User();
         user.setId(1);
-        user.setName("11111");
+        user.setName("1111");
+        //UserKey:id1
         redisService.set(UserKey.getById, "" + 1, user);
         return Result.success(true);
     }

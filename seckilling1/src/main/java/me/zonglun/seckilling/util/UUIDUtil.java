@@ -1,9 +1,8 @@
-package me.zonglun.seckilling.utils;
+package me.zonglun.seckilling.util;
 
 import java.util.UUID;
 
 public class UUIDUtil {
-
 	public static String uuid() {
 		return UUID.randomUUID().toString().replace("-", "");
 	}
