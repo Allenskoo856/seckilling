@@ -52,13 +52,7 @@ public class OrderService {
 		orderDao.insertMiaoshaOrder(miaoshaOrder);
 
 		redisService.set(OrderKey.getMiaoshaOrderByUidGid, ""+user.getId()+"_"+goods.getId(), miaoshaOrder);
-
 		return orderInfo;
-	}
-
-	public void deleteOrders() {
-//		orderDao.deleteOrders();
-//		orderDao.deleteMiaoshaOrders();
 	}
 
 }
