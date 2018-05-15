@@ -27,7 +27,6 @@ import java.util.Random;
 public class MiaoshaService {
 
 
-
     @Autowired
     GoodsService goodsService;
 
@@ -62,6 +61,7 @@ public class MiaoshaService {
      * 得到秒杀结果---
      * -1 秒杀失败
      * 0 没有买完--继续轮询查询
+     *
      * @param userId
      * @param goodsId
      * @return
@@ -163,6 +163,7 @@ public class MiaoshaService {
 
     /**
      * 校验输入的验证码是否正确
+     *
      * @param user
      * @param goodsId
      * @param verifyCode
